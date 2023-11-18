@@ -21,7 +21,6 @@ async def login_post():
     password = form.get("password")
     
     if await User.login(username, password):
-        session["user"] = (await User.login(username, password)).__dict__
         return await render_template("home.html", toast=("success", "Successfully logged in!"))
     
     return await render_template("login.html", toast=("error", "Invalid username or password."))

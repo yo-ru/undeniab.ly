@@ -44,7 +44,7 @@ class User:
                 "pw_bcrypt": pw_bcrypt
             })
             
-            return User(**await db.fetch_one("SELECT id, name, email, privileges FROM users WHERE name = :name", {"name": name}))
+            session["user"] = User(**await db.fetch_one("SELECT id, name, email, privileges FROM users WHERE name = :name", {"name": name})).__dict__
     
     @staticmethod
     async def login(name: str, password: str):
@@ -52,6 +52,7 @@ class User:
             user = await db.fetch_one("SELECT id, name, email, privileges, pw_bcrypt FROM users WHERE name_safe = :name_safe", {"name_safe": User.name_safe(name)})
             
             if user and bcrypt.checkpw(password.encode(), user["pw_bcrypt"].encode()):
-                return User(user.id, user.name, user.email, user.privileges)
+                session["user"] = User(user.id, user.name, user.email, user.privileges).__dict__
+                return True
             
-            return None
+            return False

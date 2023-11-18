@@ -67,6 +67,6 @@ async def signup_post():
     pw_bcrypt = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     
     # add user to database and log them in
-    session["user"] = (await User.signup(username, email, pw_bcrypt)).__dict__
+    await User.signup(username, email, pw_bcrypt)
     return await render_template("home.html", toast=("success", "Successfully signed up!"))
     
