@@ -1,27 +1,27 @@
 import os
-import aiohttp
 import databases
 
 from quart import Quart
-from environs import Env
-
 from cmyui import log, Ansi
 
-
-# TODO: Actually write .env file ඞ
-env = Env()
-env.read_env()
+import settings
 
 app = Quart(__name__)
 
 @app.before_serving
 async def on_start():
     log("=== undeniab.ly ===", Ansi.LRED)
-    log("Starting up... DONE", Ansi.LGREEN)
     
-    # TODO: Database
-    
-    # TODO: Discord Integration
+    # Check database connection
+    try:
+        log(f"Connecting to database...", Ansi.LGREEN)
+        db = databases.Database(settings.DB_DSN)
+        await db.connect()
+        await db.disconnect()
+    except Exception as e:
+        log(f"Failed to connect to database: {e}", Ansi.LRED)
+        log("===================", Ansi.LRED)
+        os._exit(1)
     
     # TODO: Probably some other shit
     
@@ -32,4 +32,4 @@ from blueprints.home import home
 app.register_blueprint(home)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=8080)
+    app.run(debug=settings.QUART_DEBUG, host=settings.QUART_HOST, port=settings.QUART_PORT)
