@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css-prod": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
+    "build-css": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
     "build-css-dev": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "undeniab.ly": "python -m hypercorn main:app",
+    "undeniab.ly-dev": "python main.py",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
