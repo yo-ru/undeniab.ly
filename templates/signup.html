@@ -8,7 +8,7 @@
             <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign up for <span class="text-orange-600">undeniab.ly</span>.
             </h1>
-            <form class="space-y-4 md:space-y-6" action="/signup">
+            <form class="space-y-4 md:space-y-6" action="/signup" method="post">
                 <div>
                     <label for="username" class="block mb-2 text-sm font-medium text-white">Username</label>
                     <input type="text" name="username" id="username" class="bg-zinc-800 border border-orange-600 focus:border-2 outline-none text-white sm:text-sm rounded-lg block w-full p-3" placeholder="undeniab.ly" required>
@@ -26,8 +26,8 @@
                     <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" class="bg-zinc-800 border border-orange-600 outline-none focus:border-2 text-white sm:text-sm rounded-lg block w-full p-3" required>
                 </div>
                 <button type="submit" class="w-full text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Sign up</button>
-                <p class="text-sm font-light text-white">
-                    Already have an account? <a href="/login" class="font-medium text-orange-600 hover:underline">Login</a>!
+                <p class="text-sm font-medium text-white">
+                    Already have an account? <a href="/login" class="font-medium text-orange-600 hover:underline">Login</a>
                 </p>
             </form>
         </div>

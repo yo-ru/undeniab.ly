@@ -25,7 +25,11 @@
         });
       </script>
     </p>
+    {% if session["user"] %}
+    <a href="/dashboard" type="button" class="text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Dashboard &rarr;</a>
+    {% else %}
     <a href="/signup" type="button" class="text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Get started &rarr;</a>
+    {% endif %}
   </div>
   <div class="lg:flex hidden basis-1/2 content-center">
     <img src="/static/img/example.png" class="hero w-[400px] h-[600px] object-cover m-auto rounded-xl border-orange-600 border-4">

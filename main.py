@@ -7,6 +7,7 @@ from cmyui import log, Ansi
 import settings
 
 app = Quart(__name__)
+app.secret_key = settings.QUART_SECRET
 
 @app.before_serving
 async def on_start():
@@ -38,6 +39,10 @@ app.register_blueprint(login)
 # signup
 from blueprints.signup import signup
 app.register_blueprint(signup)
+
+# logout
+from blueprints.logout import logout
+app.register_blueprint(logout)
 
 if __name__ == "__main__":
     app.run(debug=settings.QUART_DEBUG, host=settings.QUART_HOST, port=settings.QUART_PORT)
