@@ -10,9 +10,10 @@
       <script>
         var typed = new Typed("#typed", {
           strings: [
-            "<span class='text-orange-600'>undeniab.ly</span> you.",
+            "<span class='text-orange-600'>undeniab.ly</span> the best.",
             "<span class='text-orange-600'>undeniab.ly</span> custommizable.",
             "<span class='text-orange-600'>undeniab.ly</span> free.",
+            "<span class='text-orange-600'>undeniab.ly</span> you.",
             "all of your <span class='text-orange-600'>socials</span>.^250 all in <span class='text-orange-600'>one place</span>.",
             "begin your <span class='text-orange-600'>undeniable</span> journey today."
           ],
@@ -26,22 +27,8 @@
     </p>
     <a href="/signup" type="button" class="text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Get started &rarr;</a>
   </div>
-
-  <style>
-    img.hero {
-      transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1);
-      filter: brightness(1) saturate(1);
-      transition: all .35s ease-in-out;
-    }
-
-    img.hero:hover {
-      transform: perspective(200px) rotateX(-0.7deg) rotateY(0.7deg) scale(1.05);
-      filter: brightness(1.1) saturate(1.1);
-      transition: all .35s ease-in-out;
-    }
-  </style>
   <div class="lg:flex hidden basis-1/2 content-center">
-    <img src="{{ url_for('static', filename='img/example.png') }}" class="hero w-[400px] h-[600px] object-cover m-auto rounded-xl border-orange-600 border-4">
+    <img src="/static/img/example.png" class="hero w-[400px] h-[600px] object-cover m-auto rounded-xl border-orange-600 border-4">
   </div>
 </div>
 {% endblock %}
