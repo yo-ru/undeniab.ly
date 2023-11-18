@@ -1,24 +1,20 @@
-import bcrypt
-import databases
-
-from quart import Blueprint, render_template, request, session
+from quart import Blueprint, render_template, request
 
 from objects.user import User
 from constants import regexes
-import settings
 
 signup = Blueprint("signup", __name__)
 
 @signup.route("/signup")
 async def signup_get():
-    if "user" in session:
+    if User.authenticated():
         return await render_template("home.html", toast=("error", "You are already logged in."))
     
     return await render_template("signup.html")
 
 @signup.route("/signup", methods=["POST"])
 async def signup_post():
-    if "user" in session:
+    if User.authenticated():
         return await render_template("home.html", toast=("error", "You are already logged in."))
     
     form = await request.form
@@ -37,9 +33,8 @@ async def signup_post():
     if not username.isalnum():
         return await render_template("signup.html", toast=("error", "Username must be alphanumeric."))
     
-    async with databases.Database(settings.DB_DSN) as db:
-        if await db.fetch_one("SELECT 1 FROM users WHERE name_safe = :name_safe", {"name_safe": User.name_safe(username)}):
-            return await render_template("signup.html", toast=("error", "Username is already taken."))
+    if not await User.available_name(username):
+        return await render_template("signup.html", toast=("error", "Username is already taken."))
         
     # Emails must:
     # - match the regex `^[^@\s]{1,200}@[^@\s\.]{1,30}\.[^@\.\s]{1,24}$`
@@ -47,9 +42,8 @@ async def signup_post():
     if not regexes.email.match(email):
         return await render_template("signup.html", toast=("error", "Invalid email."))
     
-    async with databases.Database(settings.DB_DSN) as db:
-        if await db.fetch_one("SELECT 1 FROM users WHERE email = :email", {"email": email}):
-            return await render_template("signup.html", toast=("error", "Email is already taken."))
+    if not await User.available_email(email):
+        return await render_template("signup.html", toast=("error", "Email is already taken."))
         
     # Passwords must:
     # - be within 8-32 characters in length
@@ -64,9 +58,7 @@ async def signup_post():
     if password != confirm_password:
         return await render_template("signup.html", toast=("error", "Passwords do not match."))
     
-    pw_bcrypt = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-    
     # add user to database and log them in
-    await User.signup(username, email, pw_bcrypt)
+    await User.signup(username, email, password)
     return await render_template("home.html", toast=("success", "Successfully signed up!"))
     

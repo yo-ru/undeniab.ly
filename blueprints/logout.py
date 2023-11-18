@@ -1,12 +1,14 @@
-from quart import Blueprint, render_template, session
+from quart import Blueprint, render_template
+
+from objects.user import User
 
 logout = Blueprint("logout", __name__)
 
 @logout.route("/logout")
 async def logout_get():
-    if "user" not in session:
+    if not User.authenticated():
         return await render_template("login.html", toast=("error", "You are not logged in."))
     
-    session.pop("user", None)
+    User.logout()
     
     return await render_template("home.html", toast=("success", "Successfully logged out!"))

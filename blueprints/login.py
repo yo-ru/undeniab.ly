@@ -1,4 +1,4 @@
-from quart import Blueprint, render_template, request, session
+from quart import Blueprint, render_template, request
 
 from objects.user import User
 
@@ -6,14 +6,14 @@ login = Blueprint("login", __name__)
 
 @login.route("/login")
 async def login_get():
-    if "user" in session:
+    if User.authenticated():
         return await render_template("home.html", toast=("error", "You are already logged in."))
     
     return await render_template("login.html")
 
 @login.route("/login", methods=["POST"])
 async def login_post():
-    if "user" in session:
+    if User.authenticated():
         return await render_template("home.html", toast=("error", "You are already logged in."))
     
     form = await request.form
