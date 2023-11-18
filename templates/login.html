@@ -1,0 +1,31 @@
+{% extends "components/base.html" %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<div class="flex flex-row items-center h-[90vh] sm:justify-center">
+    <div class="w-full rounded-lg border-orange-600 border-4 md:mt-0 sm:max-w-md xl:p-0">
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Login to <span class="text-orange-600">undeniab.ly</span>.
+            </h1>
+            <form class="space-y-4 md:space-y-6" action="/login">
+                <div>
+                    <label for="username" class="block mb-2 text-sm font-medium text-white">Username</label>
+                    <input type="text" name="username" id="username" class="bg-zinc-800 border border-orange-600 focus:border-2 outline-none text-white sm:text-sm rounded-lg block w-full p-3" placeholder="undeniab.ly" required>
+                </div>
+                <div>
+                    <label for="password" class="block mb-2 text-sm font-medium text-white">Password</label>
+                    <input type="password" name="password" id="password" placeholder="••••••••" class="bg-zinc-800 border border-orange-600 outline-none focus:border-2 text-white sm:text-sm rounded-lg block w-full p-3" required>
+                </div>
+                <div class="flex items-center justify-between">
+                    <a href="/forgot" class="text-sm font-medium hover:underline text-white">Forgot password?</a>
+                </div>
+                <button type="submit" class="w-full text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Login</button>
+                <p class="text-sm font-light text-white">
+                    Don’t have an account yet? <a href="/signup" class="font-medium text-orange-600 hover:underline">Sign up</a>!
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,7 +19,12 @@
         <a href="/store" class="text-lg font-semibold leading-6 text-orange-500">Store</a>
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="/login" class="text-lg font-semibold leading-6 text-white">Log in <span aria-hidden="true">&rarr;</span></a>
+        {% if url_for(request.endpoint) == "/login" %}
+        <a href="/signup" class="text-lg font-semibold leading-6 text-white">Sign up <span aria-hidden="true">&rarr;</span></a>
+        {% else %}
+        <a href="/login" class="text-lg font-semibold leading-6 text-white">Login <span aria-hidden="true">&rarr;</span></a>
+        {% endif %}
+
       </div>
     </nav>
     <div class="lg:hidden hidden" role="dialog" aria-modal="true" id="hamburger-menu">
