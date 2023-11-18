@@ -4,7 +4,6 @@ import databases
 from quart import Blueprint, render_template, request, session
 
 from objects.user import User
-
 from constants import regexes
 import settings
 

@@ -2,6 +2,7 @@ import bcrypt
 import databases
 
 from typing import Any
+from quart import session
 
 import settings
 
