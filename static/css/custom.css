@@ -1,0 +1,11 @@
+img.hero {
+    transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1);
+    filter: brightness(1) saturate(1);
+    transition: all .35s ease-in-out;
+}
+
+img.hero:hover {
+    transform: perspective(200px) rotateX(-0.7deg) rotateY(0.7deg) scale(1.05);
+    filter: brightness(1.1) saturate(1.1);
+    transition: all .35s ease-in-out;
+}
