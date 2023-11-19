@@ -3,20 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "build-css": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
-    "build-css-dev": "npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
-    "undeniab.ly": "python -m hypercorn main:app",
-    "undeniab.ly-dev": "python main.py",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tailwindcss": "^3.3.5"
-  },
-  "devDependencies": {
+    "tailwindcss": "^3.3.5",
     "@tailwindcss/typography": "^0.5.10"
   }
 }
