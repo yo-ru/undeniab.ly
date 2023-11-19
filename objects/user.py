@@ -23,16 +23,12 @@ class User:
     def __repr__(self) -> str:
         return f"<{self.name} ({self.id})>"
     
-    @property
-    def url(self) -> str:
-        return f"https://undeniab.ly/{self.name}"
+    def to_dict(self) -> dict[str, Any]:
+        return self.__dict__
     
     @staticmethod
     def from_dict(user: dict[str, Any]) -> "User":
         return User(**user)
-    
-    def to_dict(self) -> dict[str, Any]:
-        return self.__dict__
 
     @staticmethod
     async def from_db(user: Union[int, str]) -> "User":
@@ -135,3 +131,7 @@ class User:
             return False
         finally:
             return True
+        
+    @property
+    def url(self) -> str:
+        return f"https://undeniab.ly/{self.name}"
