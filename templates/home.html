@@ -25,7 +25,7 @@
         });
       </script>
     </p>
-    {% if session["user"] %}
+    {% if User.authenticated() %}
     <a href="/dashboard" type="button" class="text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Dashboard &rarr;</a>
     {% else %}
     <a href="/signup" type="button" class="text-white no-underline bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:ring-orange-400 font-medium rounded-lg text-lg px-16 py-3 me-2 mb-2 focus:outline-none">Get started &rarr;</a>

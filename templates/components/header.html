@@ -18,7 +18,7 @@
         <a href="/store" class="text-lg font-semibold leading-6 text-orange-500">Store</a>
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:gap-x-12 lg:justify-end">
-        {% if session["user"] %}
+        {% if User.authenticated() %}
         <a href="/dashboard" class="text-lg font-semibold leading-6 text-white">Dashboard</a>
         <a href="/logout" class="text-lg font-semibold leading-6 text-white">Logout <span aria-hidden="true">&rarr;</span></a>
         {% else %}
@@ -53,7 +53,7 @@
               <a href="/store" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-orange-500">Store</a>
             </div>
             <div class="py-6">
-              {% if session["user"] %}
+              {% if User.authenticated() %}
               <a href="/dashboard" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white">Dashboard</a>
               <a href="/logout" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white">Logout</a>
               {% else %}
