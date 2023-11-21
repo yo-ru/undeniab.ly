@@ -43,6 +43,9 @@ async def on_start():
 from blueprints.home import home
 app.register_blueprint(home)
 
+from blueprints.store import store
+app.register_blueprint(store)
+
 from blueprints.login import login
 app.register_blueprint(login)
 
