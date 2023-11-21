@@ -44,11 +44,7 @@ class User:
     @staticmethod
     def name_safe(name: str) -> str:
         return name.lower().replace(" ", "-")
-    
-    @property
-    def name_safe(self) -> str:
-        return User.name_safe(self.name)
-    
+
     @staticmethod
     async def signup(name: str, email: str, password: str) -> None:
         async with databases.Database(settings.DB_DSN) as db:
