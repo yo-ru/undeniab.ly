@@ -1,27 +1,28 @@
-.hero-right {
-    transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1);
-    filter: brightness(1) saturate(1);
-    transition: all .35s ease-in-out;
-}
+@media (min-width: 1024px) {
+    .hero-right {
+        transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1);
+        filter: brightness(1) saturate(1);
+        transition: all .35s ease-in-out;
+    }
 
-.hero-right:hover {
-    transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1.05);
-    filter: brightness(1.1) saturate(1.1);
-    transition: all .35s ease-in-out;
-}
+    .hero-right:hover {
+        transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1.05);
+        filter: brightness(1.1) saturate(1.1);
+        transition: all .35s ease-in-out;
+    }
 
-.hero-left {
-    transform: perspective(200px) rotateX(0.7deg) rotateY(0.7deg) scale(1);
-    filter: brightness(1) saturate(1);
-    transition: all .35s ease-in-out;
-}
+    .hero-left {
+        transform: perspective(200px) rotateX(0.7deg) rotateY(0.7deg) scale(1);
+        filter: brightness(1) saturate(1);
+        transition: all .35s ease-in-out;
+    }
 
-.hero-left:hover {
-    transform: perspective(200px) rotateX(0.7deg) rotateY(0.7deg) scale(1.05);
-    filter: brightness(1.1) saturate(1.1);
-    transition: all .35s ease-in-out;
+    .hero-left:hover {
+        transform: perspective(200px) rotateX(0.7deg) rotateY(0.7deg) scale(1.05);
+        filter: brightness(1.1) saturate(1.1);
+        transition: all .35s ease-in-out;
+    }
 }
-
 
 #toast-container>div {
     box-shadow: none !important;
