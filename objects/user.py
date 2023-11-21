@@ -5,6 +5,8 @@ from quart import session
 from cmyui import log, Ansi
 from typing import Any, Union
 
+from constants.privileges import Privileges
+
 import settings
 
 class User:
@@ -64,6 +66,7 @@ class User:
     @staticmethod
     async def login(name: str, password: str) -> bool:
         async with databases.Database(settings.DB_DSN) as db:
+            # NOTE: we avoid using User.from_db here because we don't want to store the password in the session
             user_db = await db.fetch_one("SELECT id, name, email, privileges, pw_bcrypt FROM users WHERE name_safe = :name_safe", {"name_safe": User.name_safe(name)})
             
             if user_db and bcrypt.checkpw(password.encode(), user_db["pw_bcrypt"].encode()):
@@ -81,6 +84,10 @@ class User:
     @staticmethod
     def authenticated() -> bool:
         return "user" in session
+    
+    @staticmethod
+    def has_priv(privileges: Privileges, privilege: Privileges) -> bool:
+        return privileges & privilege != 0
 
     @staticmethod
     async def available_name(name: str) -> bool:
