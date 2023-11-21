@@ -9,6 +9,7 @@ from constants.privileges import Privileges
 
 import settings
 
+# app
 app = Quart(__name__)
 app.secret_key = settings.QUART_SECRET
 
@@ -19,6 +20,8 @@ exposed_objects = {
 }
 for obj in exposed_objects:
     app.jinja_env.globals[obj] = exposed_objects[obj]
+
+# before serving
 @app.before_serving
 async def on_start():
     log("=== undeniab.ly ===", Ansi.LRED)
@@ -34,27 +37,24 @@ async def on_start():
         log("===================", Ansi.LRED)
         os._exit(1)
     
-    # TODO: Probably some other shit
-    
     log("===================", Ansi.LRED)
-    
-# home
+
+# register blueprints
 from blueprints.home import home
 app.register_blueprint(home)
 
-# login
 from blueprints.login import login
 app.register_blueprint(login)
 
-# signup
 from blueprints.signup import signup
 app.register_blueprint(signup)
 
-# logout
 from blueprints.logout import logout
 app.register_blueprint(logout)
 
 from blueprints.dashboard import dashboard
 app.register_blueprint(dashboard, url_prefix="/dashboard")
+
+# run
 if __name__ == "__main__":
     app.run(debug=settings.QUART_DEBUG, host=settings.QUART_HOST, port=settings.QUART_PORT)
