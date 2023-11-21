@@ -11,4 +11,4 @@ async def logout_get():
     
     User.logout()
     
-    return await render_template("home.html", toast=("success", "Successfully logged out!"))
+    return await render_template("login.html", toast=("success", "Successfully logged out!"))
