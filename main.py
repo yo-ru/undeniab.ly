@@ -16,7 +16,7 @@ app.secret_key = settings.QUART_SECRET
 # expose objects to jinja
 exposed_objects = {
     "User": User,
-    "Privileges": Privileges,
+    "Privileges": Privileges
 }
 for obj in exposed_objects:
     app.jinja_env.globals[obj] = exposed_objects[obj]
