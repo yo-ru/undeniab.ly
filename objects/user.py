@@ -86,8 +86,8 @@ class User:
         return "user" in session
     
     @staticmethod
-    def has_priv(privileges: Privileges, privilege: Privileges) -> bool:
-        return privileges & privilege != 0
+    def has_priv(privilege: Privileges) -> bool:
+        return User.from_dict(session["user"]).privileges & privilege != 0
 
     @staticmethod
     async def available_name(name: str) -> bool:

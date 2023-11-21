@@ -40,7 +40,7 @@
                <span class="ms-3">Dashboard</span>
             </a>
          </li>
-         {% if User.has_priv(User.from_dict(session["user"]).privileges, Privileges.STAFF) %}
+         {% if User.has_priv(Privileges.STAFF) %}
          <li>
             <a href="/dashboard/users" class="flex items-center p-2 rounded-lg text-white hover:bg-zinc-700 group">
                <svg class="flex-shrink-0 w-5 h-5 transition duration-75 text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
