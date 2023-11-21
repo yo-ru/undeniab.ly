@@ -27,10 +27,6 @@ class User:
     
     def to_dict(self) -> dict[str, Any]:
         return self.__dict__
-    
-    @staticmethod
-    def from_dict(user: dict[str, Any]) -> "User":
-        return User(**user)
 
     @staticmethod
     async def from_db(user: Union[int, str]) -> "User":
@@ -60,7 +56,7 @@ class User:
             })
             
             user = await User.from_db(name)
-            session["user"] = user.to_dict()
+            session["user"] = user.__dict__
             log(f"{user} has signed up!", Ansi.LGREEN)
     
     @staticmethod
@@ -71,7 +67,7 @@ class User:
             
             if user_db and bcrypt.checkpw(password.encode(), user_db["pw_bcrypt"].encode()):
                 user = User(user_db.id, user_db.name, user_db.email, user_db.privileges)
-                session["user"] = user.to_dict()
+                session["user"] = user.__dict__
                 log(f"{user} has logged in!", Ansi.LGREEN)
                 return True
             
