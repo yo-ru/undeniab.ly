@@ -4,11 +4,21 @@ import databases
 from quart import Quart
 from cmyui import log, Ansi
 
+from objects.user import User
+from constants.privileges import Privileges
+
 import settings
 
 app = Quart(__name__)
 app.secret_key = settings.QUART_SECRET
 
+# expose objects to jinja
+exposed_objects = {
+    "User": User,
+    "Privileges": Privileges,
+}
+for obj in exposed_objects:
+    app.jinja_env.globals[obj] = exposed_objects[obj]
 @app.before_serving
 async def on_start():
     log("=== undeniab.ly ===", Ansi.LRED)
