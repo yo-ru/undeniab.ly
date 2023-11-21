@@ -54,5 +54,7 @@ app.register_blueprint(signup)
 from blueprints.logout import logout
 app.register_blueprint(logout)
 
+from blueprints.dashboard import dashboard
+app.register_blueprint(dashboard, url_prefix="/dashboard")
 if __name__ == "__main__":
     app.run(debug=settings.QUART_DEBUG, host=settings.QUART_HOST, port=settings.QUART_PORT)
