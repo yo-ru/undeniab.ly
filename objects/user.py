@@ -25,8 +25,9 @@ class User:
     def __repr__(self) -> str:
         return f"<{self.name} ({self.id})>"
     
-    def to_dict(self) -> dict[str, Any]:
-        return self.__dict__
+    @staticmethod
+    def from_dict(user: dict[str, Any]) -> "User":
+        return User(**user)
 
     @staticmethod
     async def from_db(user: Union[int, str]) -> "User":
