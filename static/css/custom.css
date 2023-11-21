@@ -1,6 +1,6 @@
 @media (min-width: 1024px) {
     .hero-right {
-        transform: perspective(200px) rotateX(0.7deg) rotateY(-0.7deg) scale(1);
+        transform: perspective(200px) rotateX(0.7deg) rotateY(-2deg) scale(1);
         filter: brightness(1) saturate(1);
         transition: all .35s ease-in-out;
     }
@@ -12,7 +12,7 @@
     }
 
     .hero-left {
-        transform: perspective(200px) rotateX(0.7deg) rotateY(0.7deg) scale(1);
+        transform: perspective(200px) rotateX(0.7deg) rotateY(2deg) scale(1);
         filter: brightness(1) saturate(1);
         transition: all .35s ease-in-out;
     }
