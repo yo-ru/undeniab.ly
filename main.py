@@ -61,15 +61,15 @@ app.register_blueprint(dashboard, url_prefix="/dashboard")
 
 # error handling
 @app.errorhandler(Exception)
-async def handle_exception(e):
+async def handle_exception(exception):
     # 404
-    if isinstance(e, HTTPException):
-        if e.code == 404:
+    if isinstance(exception, HTTPException):
+        if exception.code == 404:
             return await render_template("404.html"), 404
     
     # 5XX
-    log(f"Unhandled exception: {e}", Ansi.LRED)
-    return await render_template("500.html"), 500
+    log(f"Unhandled exception: {exception}", Ansi.LRED)
+    return await render_template("500.html", exception=exception), 500
 
 # run
 if __name__ == "__main__":
