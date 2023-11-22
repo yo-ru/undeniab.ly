@@ -4,6 +4,7 @@ env = Env()
 env.read_env()
 
 REGISTRATION = env.bool("REGISTRATION")
+MAINTENANCE = env.bool("MAINTENANCE")
 
 QUART_HOST = env.str("QUART_HOST")
 QUART_PORT = env.int("QUART_PORT")

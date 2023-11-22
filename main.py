@@ -2,8 +2,8 @@ import os
 import databases
 
 from cmyui import log, Ansi
-from quart import Quart, render_template
 from werkzeug.exceptions import HTTPException
+from quart import Quart, render_template, request
 
 from objects.user import User
 from constants.privileges import Privileges
@@ -39,6 +39,14 @@ async def on_start():
         os._exit(1)
     
     log("===================", Ansi.LRED)
+    
+# before request
+@app.before_request
+async def before_request():
+    # maintenance mode
+    if settings.MAINTENANCE:
+        if "/static/" not in request.path:
+            return await render_template("maintenance.html"), 503
 
 # register blueprints
 from blueprints.home import home
@@ -61,9 +69,9 @@ app.register_blueprint(dashboard, url_prefix="/dashboard")
 
 # error handling
 @app.errorhandler(Exception)
-async def handle_exception(exception):
-    # 404
+async def handle_exception(exception):   
     if isinstance(exception, HTTPException):
+        # 404
         if exception.code == 404:
             return await render_template("404.html"), 404
     
