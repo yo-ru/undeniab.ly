@@ -3,6 +3,8 @@ from quart import Blueprint, render_template, request
 from objects.user import User
 from constants import regexes
 
+import settings
+
 signup = Blueprint("signup", __name__)
 
 @signup.route("/signup")
@@ -10,12 +12,18 @@ async def signup_get():
     if User.authenticated():
         return await render_template("home.html", toast=("error", "You are already logged in."))
     
+    if not settings.REGISTRATION:
+        return await render_template("home.html", toast=("error", "Registration is currently disabled."))
+    
     return await render_template("signup.html")
 
 @signup.route("/signup", methods=["POST"])
 async def signup_post():
     if User.authenticated():
         return await render_template("home.html", toast=("error", "You are already logged in."))
+    
+    if not settings.REGISTRATION:
+        return await render_template("home.html", toast=("error", "Registration is currently disabled."))
     
     form = await request.form
     username = form.get("username")
