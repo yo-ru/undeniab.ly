@@ -9,7 +9,6 @@ MAINTENANCE = env.bool("MAINTENANCE")
 QUART_HOST = env.str("QUART_HOST")
 QUART_PORT = env.int("QUART_PORT")
 QUART_DEBUG = env.bool("QUART_DEBUG")
-QUART_SECRET = env.str("QUART_SECRET")
 
 DB_USER = env.str("DB_USER")
 DB_PASS = env.str("DB_USER")

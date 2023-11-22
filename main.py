@@ -12,7 +12,7 @@ import settings
 
 # app
 app = Quart(__name__)
-app.secret_key = settings.QUART_SECRET
+app.secret_key = os.urandom(32)
 
 # expose objects to jinja
 exposed_objects = {
