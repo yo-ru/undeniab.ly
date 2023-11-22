@@ -24,7 +24,7 @@ for obj in exposed_objects:
 
 # before serving
 @app.before_serving
-async def on_start():
+async def before_serving():
     log("=== undeniab.ly ===", Ansi.LRED)
     
     # Check database connection
