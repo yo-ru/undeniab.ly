@@ -28,3 +28,19 @@
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
 }
+
+::-webkit-scrollbar {
+    width: 2px;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(249, 115, 22);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(255, 150, 75);
+}
