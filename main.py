@@ -13,6 +13,7 @@ import settings
 # app
 app = Quart(__name__)
 app.secret_key = os.urandom(32)
+app.permanent_session_lifetime = 86400 # 1 day
 
 # expose objects to jinja
 exposed_objects = {
