@@ -1,8 +1,9 @@
 import os
 import databases
 
-from quart import Quart
 from cmyui import log, Ansi
+from quart import Quart, render_template
+from werkzeug.exceptions import HTTPException
 
 from objects.user import User
 from constants.privileges import Privileges
@@ -57,6 +58,18 @@ app.register_blueprint(logout)
 
 from blueprints.dashboard import dashboard
 app.register_blueprint(dashboard, url_prefix="/dashboard")
+
+# error handling
+@app.errorhandler(Exception)
+async def handle_exception(e):
+    # 404
+    if isinstance(e, HTTPException):
+        if e.code == 404:
+            return await render_template("404.html"), 404
+    
+    # 5XX
+    log(f"Unhandled exception: {e}", Ansi.LRED)
+    return await render_template("500.html"), 500
 
 # run
 if __name__ == "__main__":
