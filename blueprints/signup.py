@@ -32,10 +32,10 @@ async def signup_post():
     confirm_password = form.get("confirm-password")
     
     # Usernames must:
-    # - be within 2-15 characters in length
+    # - be within 1-15 characters in length
     # - be alphanumeric
     # - not already be taken by another user
-    if not 2 <= len(username) <= 32:
+    if not 1 <= len(username) <= 32:
         return await render_template("signup.html", toast=("error", "Username must be between 2 and 15 characters."))
     
     if not username.isalnum():
