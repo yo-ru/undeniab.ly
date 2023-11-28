@@ -1,0 +1,6 @@
+cmyui==1.9.3
+databases==0.8.0
+environs==9.5.0
+python_bcrypt==0.3.2
+quart==0.19.4
+Werkzeug==3.0.1
