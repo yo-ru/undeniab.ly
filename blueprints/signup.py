@@ -16,7 +16,8 @@ async def signup_get():
     if User.authenticated():
         return (
             await render_template(
-                "home.html", toast=("error", "You are already logged in."),
+                "home.html",
+                toast=("error", "You are already logged in."),
             ),
             403,
         )
@@ -24,7 +25,8 @@ async def signup_get():
     if not settings.REGISTRATION:
         return (
             await render_template(
-                "home.html", toast=("error", "Registration is currently disabled."),
+                "home.html",
+                toast=("error", "Registration is currently disabled."),
             ),
             401,
         )
@@ -37,7 +39,8 @@ async def signup_post():
     if User.authenticated():
         return (
             await render_template(
-                "home.html", toast=("error", "You are already logged in."),
+                "home.html",
+                toast=("error", "You are already logged in."),
             ),
             403,
         )
@@ -45,7 +48,8 @@ async def signup_post():
     if not settings.REGISTRATION:
         return (
             await render_template(
-                "home.html", toast=("error", "Registration is currently disabled."),
+                "home.html",
+                toast=("error", "Registration is currently disabled."),
             ),
             401,
         )
@@ -68,12 +72,14 @@ async def signup_post():
 
     if not username.isalnum():
         return await render_template(
-            "signup.html", toast=("error", "Username must be alphanumeric."),
+            "signup.html",
+            toast=("error", "Username must be alphanumeric."),
         )
 
     if not await User.available_name(username):
         return await render_template(
-            "signup.html", toast=("error", "Username is already taken."),
+            "signup.html",
+            toast=("error", "Username is already taken."),
         )
 
     # Emails must:
@@ -84,7 +90,8 @@ async def signup_post():
 
     if not await User.available_email(email):
         return await render_template(
-            "signup.html", toast=("error", "Email is already taken."),
+            "signup.html",
+            toast=("error", "Email is already taken."),
         )
 
     # Passwords must:
@@ -105,11 +112,13 @@ async def signup_post():
 
     if password != confirm_password:
         return await render_template(
-            "signup.html", toast=("error", "Passwords do not match."),
+            "signup.html",
+            toast=("error", "Passwords do not match."),
         )
 
     # add user to database and log them in
     await User.signup(username, email, password)
     return await render_template(
-        "home.html", toast=("success", "Successfully signed up!"),
+        "home.html",
+        toast=("success", "Successfully signed up!"),
     )

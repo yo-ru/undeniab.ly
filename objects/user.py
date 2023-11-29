@@ -30,11 +30,11 @@ class User:
         return f"<{self.name} ({self.id})>"
 
     @staticmethod
-    def from_dict(user: dict[str, Any]) -> "User":
+    def from_dict(user: dict[str, Any]) -> User:
         return User(**user)
 
     @staticmethod
-    async def from_db(user: int | str) -> "User":
+    async def from_db(user: int | str) -> User:
         # check if user is int or str
         if isinstance(user, int):
             query = "SELECT id, name, email, privileges FROM users WHERE id = :id"
@@ -77,7 +77,8 @@ class User:
             )
 
             if user_db and bcrypt.checkpw(
-                password.encode(), user_db["pw_bcrypt"].encode(),
+                password.encode(),
+                user_db["pw_bcrypt"].encode(),
             ):
                 user = User(user_db.id, user_db.name, user_db.email, user_db.privileges)
                 session["user"] = user.__dict__
@@ -112,7 +113,8 @@ class User:
     async def available_email(email: str) -> bool:
         async with databases.Database(settings.DB_DSN) as db:
             return not await db.fetch_one(
-                "SELECT 1 FROM users WHERE email = :email", {"email": email},
+                "SELECT 1 FROM users WHERE email = :email",
+                {"email": email},
             )
 
     @staticmethod

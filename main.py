@@ -95,5 +95,7 @@ async def handle_exception(exception):
 # run
 if __name__ == "__main__":
     app.run(
-        debug=settings.QUART_DEBUG, host=settings.QUART_HOST, port=settings.QUART_PORT,
+        debug=settings.QUART_DEBUG,
+        host=settings.QUART_HOST,
+        port=settings.QUART_PORT,
     )

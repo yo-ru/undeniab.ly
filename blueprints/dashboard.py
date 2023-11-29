@@ -12,7 +12,8 @@ dashboard = Blueprint("dashboard", __name__)
 async def home_get():
     if not User.authenticated():
         return await render_template(
-            "login.html", toast=("error", "You are not logged in."),
+            "login.html",
+            toast=("error", "You are not logged in."),
         )
 
     return await render_template("dashboard/home.html")

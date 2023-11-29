@@ -14,7 +14,8 @@ async def login_get():
     if User.authenticated():
         return (
             await render_template(
-                "home.html", toast=("error", "You are already logged in."),
+                "home.html",
+                toast=("error", "You are already logged in."),
             ),
             403,
         )
@@ -27,7 +28,8 @@ async def login_post():
     if User.authenticated():
         return (
             await render_template(
-                "home.html", toast=("error", "You are already logged in."),
+                "home.html",
+                toast=("error", "You are already logged in."),
             ),
             403,
         )
@@ -38,9 +40,11 @@ async def login_post():
 
     if await User.login(username, password):
         return await render_template(
-            "home.html", toast=("success", "Successfully logged in!"),
+            "home.html",
+            toast=("success", "Successfully logged in!"),
         )
 
     return await render_template(
-        "login.html", toast=("error", "Invalid username or password."),
+        "login.html",
+        toast=("error", "Invalid username or password."),
     )
