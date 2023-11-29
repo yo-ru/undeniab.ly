@@ -18,5 +18,8 @@ update:
 	pipenv requirements > requirements.txt
 	pipenv requirements --dev > requirements-dev.txt
 
+run:
+	pipenv run main.py
+
 clean:
 	pipenv clean
