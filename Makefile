@@ -1,17 +1,22 @@
+shell:
+	pipenv shell
+
+lint:
+	pipenv run pre-commit run --all-files
+
 install:
-	npm install
-	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
-	python -m pip install -r requirements.txt
+	pipenv install
 
-build-css:
-	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
+install-dev:
+	pipenv install --dev
 
-build-css-dev:
-	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
+uninstall:
+	pipenv --rm
 
-run:
-	python -m hypercorn main:app
+update:
+	pipenv update --dev
+	pipenv requirements > requirements.txt
+	pipenv requirements --dev > requirements-dev.txt
 
-run-dev:
-	python main.py
-
+clean:
+	pipenv clean
