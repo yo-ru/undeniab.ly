@@ -10,10 +10,11 @@ environs = "==9.5.0"
 python-bcrypt = "==0.3.2"
 quart = "==0.19.4"
 werkzeug = "==3.0.1"
+tzdata = "*"
+cryptography = "*"
 
 [dev-packages]
 pre-commit = "*"
-
 
 [requires]
 python_version = "3.12"
