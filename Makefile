@@ -4,6 +4,12 @@ shell:
 lint:
 	pipenv run pre-commit run --all-files
 
+build-css:
+	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
+
+build-css-dev:
+	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
+
 install:
 	npm i
 	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css

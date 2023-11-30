@@ -18,6 +18,7 @@ this guide will be targeted towards ubuntu (22.04) - other distros may have slig
 # Requirements
 we aim to minimize our dependencies, but still rely on ones such as
 - python (programming language)
+- node (tailwind css)
 - mysql (relational database)
 - nginx (http(s) reverse proxy)
 
