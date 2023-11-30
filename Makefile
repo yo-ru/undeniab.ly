@@ -5,9 +5,13 @@ lint:
 	pipenv run pre-commit run --all-files
 
 install:
+	npm i
+	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
 	pipenv install
 
 install-dev:
+	npm i
+	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
 	pipenv install --dev
 
 uninstall:
