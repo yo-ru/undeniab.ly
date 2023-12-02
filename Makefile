@@ -29,7 +29,7 @@ update:
 	pipenv requirements --dev > requirements-dev.txt
 
 run:
-	pipenv run main.py
+	pipenv run python3.12 main.py
 
 clean:
 	pipenv clean
