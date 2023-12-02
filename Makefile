@@ -12,12 +12,12 @@ build-css-dev:
 
 install:
 	npm i
-	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
+	make build-css-dev
 	pipenv install
 
 install-dev:
 	npm i
-	npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css
+	make build-css-dev
 	pipenv install --dev
 
 uninstall:
