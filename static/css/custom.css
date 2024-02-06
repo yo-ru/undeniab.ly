@@ -1,4 +1,4 @@
-@media (min-width: 1920px) {
+@media (min-width: 1024px) {
     .hero-right {
         transform: perspective(200px) rotateX(0.7deg) rotateY(-2deg) scale(1);
         filter: brightness(1) saturate(1);
