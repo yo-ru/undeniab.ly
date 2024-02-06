@@ -12,12 +12,12 @@ build-css-dev:
 
 install:
 	npm i
-	make build-css-dev
+	make build-css
 	pipenv install
 
 install-dev:
 	npm i
-	make build-css-dev
+	make build-css
 	pipenv install --dev
 
 uninstall:
