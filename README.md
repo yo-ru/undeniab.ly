@@ -29,13 +29,11 @@ we aim to minimize our dependencies, but still rely on ones such as
 sudo apt update && sudo apt upgrade -y
 
 # install required packages
-sudo apt install -y python3.12 nodejs \
+sudo apt install -y python3.12-full \
+                    nodejs npm \
                     build-essential \
                     mysql-server \
                     nginx
-
-# make sure pip, setuptools, & pipenv are up to date
-python3.12 -m pip install -U pip setuptools pipenv
 
 # install undeniab.ly's dependencies (python-specific & node-specific)
 make install
