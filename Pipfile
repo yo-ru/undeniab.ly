@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 cmyui = "==1.9.3"
 databases = "==0.8.0"
-environs = "==9.5.0"
+environs = "*"
 quart = "==0.19.4"
 werkzeug = "==3.0.1"
 tzdata = "*"
