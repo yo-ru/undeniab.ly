@@ -3,12 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
+
         <!-- Stylesheets -->
         <link href="/static/css/output.css" rel="stylesheet" />
         <link href="/static/css/custom.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-        
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,10 +18,15 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@100..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@100..900&display=swap" rel="stylesheet">
-        
+
         <!-- Font Awesome -->
-        <script src="https://kit.fontawesome.com/50d7a8b94d.js" crossorigin="anonymous"></script>
-        
+        <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css" rel="stylesheet">
+        <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css" rel="stylesheet">
+        <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-regular.css" rel="stylesheet">
+        <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-light.css" rel="stylesheet">
+        <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/duotone.css" rel="stylesheet">
+        <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/brands.css" rel="stylesheet">
+
         <!-- Metadata -->
         <title>{{ bio.display_name }}</title>
 
@@ -42,18 +47,18 @@
         <meta property="twitter:title" content="undeniab.ly — {{ bio.display_name }}" />
         <meta property="twitter:description" content="{{ bio.description | replace('\\n', ' ') | safe }}" />
         <meta property="twitter:image" content="{{ bio.pfp_url}}" />
-        
+
         <style>
             .primary-color { color: #{{ '%0x' % bio.p_color }}; }
             .secondary-color { color: #{{ '%0x' % bio.s_color }}; }
             .accent-color { color: #{{ '%0x' % bio.a_color }}; }
             .text-color { color: #{{ '%0x' % bio.t_color }}; }
             .icon-color { color: #{{ '%0x' % bio.i_color }}; }
-            
+
             .bg-color {
                 background-color: #{{ '%08x' % ((bio.bg_color | bitwise_left_shift(8)) + (bio.bg_brightness * 255 // 100)) }};
             }
-            
+
             .bg-blur { backdrop-filter: blur({{ bio.bg_blur }}px); }
             .bg-image {
                 background-image: url("{{ bio.bg_url }}");
@@ -61,28 +66,28 @@
                 background-position: center;
                 background-repeat: no-repeat;
             }
-            
+
             .opacity {
                 background-color: #{{ '%08x' % ((0 | bitwise_left_shift(8)) + (bio.opacity * 255) | int) }};
             }
-            
+
             .blur { backdrop-filter: blur({{ bio.blur }}px); }
-            
+
             .font { font-family: "{{ bio.font }}", sans-serif; }
-            
+
             .border {
                 border-color: #{{ '%0x' % bio.a_color }};
                 border-width: {{ bio.border_width }}px;
                 border-radius: {{ bio.border_radius }}rem;
             }
-            
+
             .pfp {
                 border-color: #{{ '%0x' % bio.a_color }};
                 border-width: {{ bio.border_width }}px;
             }/**/
         </style>
     </head>
-    
+
     <body class="bg-color font text-color bg-image">
         <!-- Scripts -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -106,7 +111,7 @@
 
                 let audios = document.querySelectorAll("audio");
                 audios.forEach(audio => audio.play());
-                
+
                 document.getElementById("autoplay-overlay").style.opacity = "0";
                 document.getElementById("autoplay-overlay").style.transition = "opacity 0.5s ease-in-out";
 
@@ -121,8 +126,8 @@
         <div class="container">
             <!-- Autoplay Overlay -->
             {% if bio.autoplay_fix %}
-            <button id="autoplay-overlay" 
-                    class="z-30 absolute top-0 left-0 w-full h-full bg-color text-color text-5xl" 
+            <button id="autoplay-overlay"
+                    class="z-30 absolute top-0 left-0 w-full h-full bg-color text-color text-5xl"
                     onclick="autoplayFix()">
                 <p class="text-color">{{ bio.autoplay_txt }}</p>
             </button>
@@ -147,7 +152,7 @@
                     videos.forEach(video => video.muted = false);
                     audios.forEach(audio => audio.muted = false);
                 }
-                
+
                 function mute() {
                     muted = true;
                     document.getElementById("mute-button").innerHTML = `
@@ -160,7 +165,7 @@
                     videos.forEach(video => video.muted = true);
                     audios.forEach(audio => audio.muted = true);
                 }
-                
+
                 function toggleMute() {
                     if (muted) {
                         unmute();
@@ -169,9 +174,9 @@
                     }
                 }
             </script>
-            
-            <button id="mute-button" 
-                    class="z-20 absolute top-[10px] left-[10px] border bg-color opacity h-auto p-2" 
+
+            <button id="mute-button"
+                    class="z-20 absolute top-[10px] left-[10px] border bg-color opacity h-auto p-2"
                     onclick="toggleMute()">
                 <svg class="flex-shrink-0 w-6 h-6 transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                     <title>Mute</title>
@@ -197,12 +202,12 @@
                             <!-- TODO: implement views counter -->
                             <p class="text-md ml-2">0{{ bio.views }}</p>
                         </div>
-                        
+
                         <!-- Profile Picture -->
-                        <img src="{{ bio.pfp_url }}" 
-                             alt="Profile Picture" 
+                        <img src="{{ bio.pfp_url }}"
+                             alt="Profile Picture"
                              class="w-28 h-28 rounded-full pfp">
-                        
+
                         <!-- Badges Section -->
                         <div class="flex flex-col w-28 h-28 items-end [&>:not(:last-child)]:mb-2">
                             {% if Badges.has_badge(user.badges, Badges.RICH) %}
@@ -236,7 +241,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    
+
                     <!-- Display Name and Description -->
                     <div class="flex flex-col items-center justify-between mb-4">
                         <h1 class="text-3xl font-bold">{{ bio.display_name }}</h1>
@@ -247,8 +252,8 @@
                     {% if links %}
                     <div class="flex flex-row items-center justify-center [&>:not(:last-child)]:mr-2">
                         {% for link in links %}
-                        <a title="{{ link.link_platform | capitalize }}" 
-                           href="{{ link.link_url }}" 
+                        <a title="{{ link.link_platform | capitalize }}"
+                           href="{{ link.link_url }}"
                            class="icon-color rounded-full pfp w-12 h-12 flex items-center justify-center transition-opacity duration-300 hover:opacity-50">
                             <i class="fa-brands fa-{{ link.link_platform }} fa-xl"></i>
                         </a>
