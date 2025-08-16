@@ -7,6 +7,7 @@ from quart import request
 from objects.bio import Bio
 from objects.links import Links
 from objects.user import User
+from objects.views import Views
 
 bio = Blueprint("bio", __name__)
 
@@ -16,12 +17,15 @@ bio = Blueprint("bio", __name__)
 async def bio_get(username: str):
     user = await User.from_db(username)
 
+    # user not found
     if not user:
         return await render_template("404.html"), 404
 
+    # user is banned
     if user.is_banned():
         return await render_template("404.html"), 404
 
+    # get bio
     bio = await Bio.from_user(user)
 
     # user is missing their bio table (shouldn't happen)
@@ -34,6 +38,23 @@ async def bio_get(username: str):
             500,
         )
 
+    # get links
     links = await Links.from_user(user)
 
-    return await render_template("bio.html", bio=bio, links=links, user=user)
+    # add view
+    await Views.add(
+        ip=request.remote_addr,
+        country=request.headers.get("CF-IPCountry"),
+        user_id=user.id,
+    )
+
+    # get views
+    views = await Views.from_user(user)
+
+    return await render_template(
+        "bio.html",
+        bio=bio,
+        links=links,
+        user=user,
+        views=len(views),
+    )

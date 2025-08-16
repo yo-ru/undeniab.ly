@@ -28,40 +28,40 @@
         <link href="https://site-assets.fontawesome.com/releases/v6.7.2/css/brands.css" rel="stylesheet">
 
         <!-- Metadata -->
-        <title>{{ bio.display_name }}</title>
+        <title>{{ bio.display_name | safe }}</title>
 
         <!-- Primary Meta Tags -->
-        <meta name="title" content="undeniab.ly — {{ bio.display_name }}" />
-        <meta name="description" content="{{ bio.description | replace('', ' ') | safe }}" />
+        <meta name="title" content="undeniab.ly — {{ bio.display_name | safe }}" />
+        <meta name="description" content="{{ bio.description | replace('\\n', ' ') | safe }}" />
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://undeniab.ly/{{ user.name }}" />
-        <meta property="og:title" content="undeniab.ly — {{ bio.display_name }}" />
+        <meta property="og:title" content="undeniab.ly — {{ bio.display_name | safe }}" />
         <meta property="og:description" content="{{ bio.description | replace('\\n', ' ') | safe }}" />
         <meta property="og:image" content="{{ bio.pfp_url }}" />
 
         <!-- X (Twitter) -->
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://undeniab.ly/{{ user.name }}" />
-        <meta property="twitter:title" content="undeniab.ly — {{ bio.display_name }}" />
+        <meta property="twitter:url" content="https://undeniab.ly/{{ user.name | safe }}" />
+        <meta property="twitter:title" content="undeniab.ly — {{ bio.display_name | safe }}" />
         <meta property="twitter:description" content="{{ bio.description | replace('\\n', ' ') | safe }}" />
-        <meta property="twitter:image" content="{{ bio.pfp_url}}" />
+        <meta property="twitter:image" content="{{ bio.pfp_url | safe }}" />
 
         <style>
-            .primary-color { color: #{{ '%0x' % bio.p_color }}; }
-            .secondary-color { color: #{{ '%0x' % bio.s_color }}; }
-            .accent-color { color: #{{ '%0x' % bio.a_color }}; }
-            .text-color { color: #{{ '%0x' % bio.t_color }}; }
-            .icon-color { color: #{{ '%0x' % bio.i_color }}; }
+            .primary-color { color: #{{ '%0x' % bio.p_color | int }}; }
+            .secondary-color { color: #{{ '%0x' % bio.s_color | int }}; }
+            .accent-color { color: #{{ '%0x' % bio.a_color | int }}; }
+            .text-color { color: #{{ '%0x' % bio.t_color | int }}; }
+            .icon-color { color: #{{ '%0x' % bio.i_color | int }}; }
 
             .bg-color {
-                background-color: #{{ '%08x' % ((bio.bg_color | bitwise_left_shift(8)) + (bio.bg_brightness * 255 // 100)) }};
+                background-color: #{{ '%08x' % ((bio.bg_color | bitwise_left_shift(8)) + (bio.bg_brightness * 255 // 100)) | int }};
             }
 
             .bg-blur { backdrop-filter: blur({{ bio.bg_blur }}px); }
             .bg-image {
-                background-image: url("{{ bio.bg_url }}");
+                background-image: url("{{ bio.bg_url | safe }}");
                 background-size: fill;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -96,7 +96,7 @@
 
         <!-- Background Video -->
         {% if bio.bg_url.endswith('.mp4') %}
-        <video loop class="z-[-1] absolute top-0 left-0 w-full h-full object-cover" src="{{ bio.bg_url }}"></video>
+        <video loop class="z-[-1] absolute top-0 left-0 w-full h-full object-cover" src="{{ bio.bg_url | safe }}"></video>
         <script>
             document.body.classList.remove("bg-image");
         </script>
@@ -199,12 +199,11 @@
                                 <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
                                 <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>
-                            <!-- TODO: implement views counter -->
-                            <p class="text-md ml-2">0{{ bio.views }}</p>
+                            <p class="text-md ml-2">{{ views | format }}</p>
                         </div>
 
                         <!-- Profile Picture -->
-                        <img src="{{ bio.pfp_url }}"
+                        <img src="{{ bio.pfp_url | safe }}"
                              alt="Profile Picture"
                              class="w-28 h-28 rounded-full pfp">
 
@@ -244,7 +243,7 @@
 
                     <!-- Display Name and Description -->
                     <div class="flex flex-col items-center justify-between mb-4">
-                        <h1 class="text-3xl font-bold">{{ bio.display_name }}</h1>
+                        <h1 class="text-3xl font-bold">{{ bio.display_name | safe }}</h1>
                         <p class="text-md self-center">{{ bio.description | replace('\\n', '<br>') | safe }}</p>
                     </div>
 
@@ -252,10 +251,10 @@
                     {% if links %}
                     <div class="flex flex-row items-center justify-center [&>:not(:last-child)]:mr-2">
                         {% for link in links %}
-                        <a title="{{ link.link_platform | capitalize }}"
-                           href="{{ link.link_url }}"
+                        <a title="{{ link.link_name | safe }}"
+                           href="{{ link.link_url | safe }}"
                            class="icon-color rounded-full pfp w-12 h-12 flex items-center justify-center transition-opacity duration-300 hover:opacity-50">
-                            <i class="fa-brands fa-{{ link.link_platform }} fa-xl"></i>
+                            <i class="{{ link.link_icon | safe }} fa-xl"></i>
                         </a>
                         {% endfor %}
                     </div>

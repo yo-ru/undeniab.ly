@@ -13,15 +13,17 @@ class Links:
         user_id: int,
         link_id: int,
         link_parent_id: int,
-        link_platform: str,
+        link_icon: str,
         link_url: str,
+        link_name: str,
     ) -> None:
         self.id = id
         self.user_id = user_id
         self.link_id = link_id
         self.link_parent_id = link_parent_id
-        self.link_platform = link_platform
+        self.link_icon = link_icon
         self.link_url = link_url
+        self.link_name = link_name
 
     def __repr__(self) -> str:
         return f"<{self.link_platform} ({self.link_url})>"
