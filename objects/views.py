@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+
 import databases
 
 import settings
-
 from objects.user import User
 
 
@@ -22,15 +23,16 @@ class Views:
                 {"user_id": user.id},
             )
             return [Views(**view) for view in views]
-    
+
     @staticmethod
     async def add(ip: str, country: str, user_id: int) -> bool:
         async with databases.Database(settings.DB_DSN) as db:
             try:
+                ip_hash = hashlib.sha256(ip.encode()).digest()
                 await db.execute(
-                    "INSERT INTO bio_views (ip, country, user_id) VALUES (:ip, :country, :user_id)",
-                    {"ip": ip, "country": country, "user_id": user_id},
+                    "INSERT INTO bio_views (ip_hash, country, user_id) VALUES (:ip_hash, :country, :user_id)",
+                    {"ip_hash": ip_hash, "country": country, "user_id": user_id},
                 )
                 return True
-            except Exception as e:
+            except Exception:
                 return False
