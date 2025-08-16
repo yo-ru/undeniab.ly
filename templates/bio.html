@@ -96,7 +96,7 @@
 
         <!-- Background Video -->
         {% if bio.bg_url.endswith('.mp4') %}
-        <video loop class="z-[-1] absolute top-0 left-0 w-full h-full object-cover" src="{{ bio.bg_url | safe }}"></video>
+        <video loop playsinline class="z-[-1] absolute top-0 left-0 w-full h-full object-cover" src="{{ bio.bg_url | safe }}"></video>
         <script>
             document.body.classList.remove("bg-image");
         </script>
