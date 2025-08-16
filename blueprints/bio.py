@@ -43,7 +43,7 @@ async def bio_get(username: str):
 
     # add view
     await Views.add(
-        ip=request.remote_addr,
+        ip=request.headers.get("CF-Connecting-IP"),
         country=request.headers.get("CF-IPCountry"),
         user_id=user.id,
     )
