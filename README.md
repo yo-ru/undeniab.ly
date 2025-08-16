@@ -29,7 +29,8 @@ we aim to minimize our dependencies, but still rely on ones such as
 sudo apt update && sudo apt upgrade -y
 
 # install required packages
-sudo apt install -y python3.12-full \
+# NOTE: pipx & pyenv take care of your python versioning and package requirements.
+sudo apt install -y python3-full python3-dev pipx pyenv \
                     nodejs npm \
                     build-essential \
                     mysql-server \
