@@ -29,4 +29,4 @@ async def bio_get(username: str):
 
     links = await Links.from_user(user)
 
-    return await render_template("bio.html", bio=bio, privileges=user.privileges, badges=user.badges, links=links)
+    return await render_template("bio.html", bio=bio, links=links, user=user)
