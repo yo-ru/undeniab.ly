@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="return false">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <!-- Stylesheets -->
+        <link href="/static/css/output.css" rel="stylesheet" />
+        <link href="/static/css/custom.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+        
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@100..900&display=swap" rel="stylesheet">
+        
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/50d7a8b94d.js" crossorigin="anonymous"></script>
+        
+        <title>{{ bio.display_name }}</title>
+        
+        <style>
+            .primary-color { color: #{{ '%0x' % bio.p_color }}; }
+            .secondary-color { color: #{{ '%0x' % bio.s_color }}; }
+            .accent-color { color: #{{ '%0x' % bio.a_color }}; }
+            .text-color { color: #{{ '%0x' % bio.t_color }}; }
+            .icon-color { color: #{{ '%0x' % bio.i_color }}; }
+            
+            .bg-color {
+                background-color: #{{ '%08x' % ((bio.bg_color | bitwise_left_shift(8)) + (bio.bg_brightness * 255 // 100)) }};
+            }
+            
+            .bg-blur { backdrop-filter: blur({{ bio.bg_blur }}px); }
+            .bg-image {
+                background-image: url("{{ bio.bg_url }}");
+                background-size: fill;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            
+            .opacity {
+                background-color: #{{ '%08x' % ((0 | bitwise_left_shift(8)) + (bio.opacity * 255) | int) }};
+            }
+            
+            .blur { backdrop-filter: blur({{ bio.blur }}px); }
+            
+            .font { font-family: "{{ bio.font }}", sans-serif; }
+            
+            .border {
+                border-color: #{{ '%0x' % bio.a_color }};
+                border-width: {{ bio.border_width }}px;
+                border-radius: {{ bio.border_radius }}rem;
+            }
+            
+            .pfp {
+                border-color: #{{ '%0x' % bio.a_color }};
+                border-width: {{ bio.border_width }}px;
+            }/**/
+        </style>
+    </head>
+    
+    <body class="bg-color font text-color bg-image">
+        <!-- Scripts -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+        <!-- Background Video -->
+        {% if bio.bg_url.endswith('.mp4') %}
+        <video loop class="z-[-1] absolute top-0 left-0 w-full h-full object-cover" src="{{ bio.bg_url }}"></video>
+        <script>
+            document.body.classList.remove("bg-image");
+        </script>
+        {% endif %}
+
+        <!-- Autoplay Fix Script -->
+        {% if bio.autoplay_fix %}
+        <script>
+            function autoplayFix() {
+                let videos = document.querySelectorAll("video");
+                videos.forEach(video => video.play());
+
+                let audios = document.querySelectorAll("audio");
+                audios.forEach(audio => audio.play());
+                
+                document.getElementById("autoplay-overlay").style.opacity = "0";
+                document.getElementById("autoplay-overlay").style.transition = "opacity 0.5s ease-in-out";
+
+                setTimeout(() => {
+                    document.getElementById("autoplay-overlay").style.display = "none";
+                }, 500);
+            }
+        </script>
+        {% endif %}
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Autoplay Overlay -->
+            {% if bio.autoplay_fix %}
+            <button id="autoplay-overlay" 
+                    class="z-30 absolute top-0 left-0 w-full h-full bg-color text-color text-5xl" 
+                    onclick="autoplayFix()">
+                <p class="text-color">{{ bio.autoplay_txt }}</p>
+            </button>
+
+            <!-- Mute/Unmute Button -->
+            <script>
+                let muted = false;
+                let videos = document.querySelectorAll("video");
+                let audios = document.querySelectorAll("audio");
+
+                function unmute() {
+                    muted = false;
+                    document.getElementById("mute-button").innerHTML = `
+                        <svg class="flex-shrink-0 w-6 h-6 transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <title>Mute</title>
+                            <path d="M13 6.037c0-1.724-1.978-2.665-3.28-1.562L5.638 7.933H4c-1.105 0-2 .91-2 2.034v4.066c0 1.123.895 2.034 2 2.034h1.638l4.082 3.458c1.302 1.104 3.28.162 3.28-1.562V6.037Z"/>
+                            <path fill-rule="evenodd" d="M14.786 7.658a.988.988 0 0 1 1.414-.014A6.135 6.135 0 0 1 18 12c0 1.662-.655 3.17-1.715 4.27a.989.989 0 0 1-1.414.014 1.029 1.029 0 0 1-.014-1.437A4.085 4.085 0 0 0 16 12a4.085 4.085 0 0 0-1.2-2.904 1.029 1.029 0 0 1-.014-1.438Z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M17.657 4.811a.988.988 0 0 1 1.414 0A10.224 10.224 0 0 1 22 12c0 2.807-1.12 5.35-2.929 7.189a.988.988 0 0 1-1.414 0 1.029 1.029 0 0 1 0-1.438A8.173 8.173 0 0 0 20 12a8.173 8.173 0 0 0-2.343-5.751 1.029 1.029 0 0 1 0-1.438Z" clip-rule="evenodd"/>
+                        </svg>
+                    `;
+
+                    videos.forEach(video => video.muted = false);
+                    audios.forEach(audio => audio.muted = false);
+                }
+                
+                function mute() {
+                    muted = true;
+                    document.getElementById("mute-button").innerHTML = `
+                        <svg class="flex-shrink-0 w-6 h-6 transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <title>Unmute</title>
+                            <path d="M5.707 4.293a1 1 0 0 0-1.414 1.414l14 14a1 1 0 0 0 1.414-1.414l-.004-.005C21.57 16.498 22 13.938 22 12a9.972 9.972 0 0 0-2.929-7.071 1 1 0 1 0-1.414 1.414A7.972 7.972 0 0 1 20 12c0 1.752-.403 3.636-1.712 4.873l-1.433-1.433C17.616 14.37 18 13.107 18 12c0-1.678-.69-3.197-1.8-4.285a1 1 0 1 0-1.4 1.428A3.985 3.985 0 0 1 16 12c0 .606-.195 1.335-.59 1.996L13 11.586V6.135c0-1.696-1.978-2.622-3.28-1.536L7.698 6.284l-1.99-1.991ZM4 8h.586L13 16.414v1.451c0 1.696-1.978 2.622-3.28 1.536L5.638 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z"/>
+                        </svg>
+                    `;
+
+                    videos.forEach(video => video.muted = true);
+                    audios.forEach(audio => audio.muted = true);
+                }
+                
+                function toggleMute() {
+                    if (muted) {
+                        unmute();
+                    } else {
+                        mute();
+                    }
+                }
+            </script>
+            
+            <button id="mute-button" 
+                    class="z-20 absolute top-[10px] left-[10px] border bg-color opacity h-auto p-2" 
+                    onclick="toggleMute()">
+                <svg class="flex-shrink-0 w-6 h-6 transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <title>Mute</title>
+                    <path d="M13 6.037c0-1.724-1.978-2.665-3.28-1.562L5.638 7.933H4c-1.105 0-2 .91-2 2.034v4.066c0 1.123.895 2.034 2 2.034h1.638l4.082 3.458c1.302 1.104 3.28.162 3.28-1.562V6.037Z"/>
+                    <path fill-rule="evenodd" d="M14.786 7.658a.988.988 0 0 1 1.414-.014A6.135 6.135 0 0 1 18 12c0 1.662-.655 3.17-1.715 4.27a.989.989 0 0 1-1.414.014 1.029 1.029 0 0 1-.014-1.437A4.085 4.085 0 0 0 16 12a4.085 4.085 0 0 0-1.2-2.904 1.029 1.029 0 0 1-.014-1.438Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M17.657 4.811a.988.988 0 0 1 1.414 0A10.224 10.224 0 0 1 22 12c0 2.807-1.12 5.35-2.929 7.189a.988.988 0 0 1-1.414 0 1.029 1.029 0 0 1 0-1.438A8.173 8.173 0 0 0 20 12a8.173 8.173 0 0 0-2.343-5.751 1.029 1.029 0 0 1 0-1.438Z" clip-rule="evenodd"/>
+                </svg>
+            </button>
+            {% endif %}
+
+            <!-- Bio Content -->
+            <div class="z-10 flex flex-col justify-center min-h-screen py-16 max-w-[42rem] w-full m-auto px-4">
+                <!-- Main Bio Card -->
+                <div class="border h-auto mb-4 p-4 bg-color opacity">
+                    <!-- Header Section -->
+                    <div class="flex flex-row justify-between mb-4">
+                        <!-- Views Counter -->
+                        <div class="flex flex-row w-28 h-28">
+                            <svg class="flex-shrink-0 text-md transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                            <p class="text-md ml-2">1{{ bio.views }}</p>
+                        </div>
+                        
+                        <!-- Profile Picture -->
+                        <img src="{{ bio.pfp_url }}" 
+                             alt="Profile Picture" 
+                             class="w-28 h-28 rounded-full pfp">
+                        
+                        <!-- Badges Section -->
+                        <div class="flex flex-col w-28 h-28 items-end [&>:not(:last-child)]:mb-2">
+                            {% if Badges.has_badge(badges, Badges.RICH) %}
+                            <svg class="flex-shrink-0 text-md transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <title>Rich</title>
+                                <path fill-rule="evenodd" d="M7 6a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2v-4a3 3 0 0 0-3-3H7V6Z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M2 11a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-7Zm7.5 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" clip-rule="evenodd"/>
+                                <path d="M10.5 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+                            </svg>
+                            {% endif %}
+
+                            {% if Badges.has_badge(badges, Badges.PREMIUM) %}
+                            <svg class="flex-shrink-0 text-md transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <title>Premium</title>
+                                <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z"/>
+                            </svg>
+                            {% endif %}
+
+                            {% if Badges.has_badge(badges, Badges.STAFF) %}
+                            <svg class="flex-shrink-0 text-md transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <title>Staff</title>
+                                <path d="M8.4 6.763c-.251.1-.383.196-.422.235L6.564 5.584l2.737-2.737c1.113-1.113 3.053-1.097 4.337.187l1.159 1.159a1 1 0 0 1 1.39.022l4.105 4.105a1 1 0 0 1 .023 1.39l1.345 1.346a1 1 0 0 1 0 1.415l-2.052 2.052a1 1 0 0 1-1.414 0l-1.346-1.346a1 1 0 0 1-1.323.039L11.29 8.983a1 1 0 0 1 .04-1.324l-.849-.848c-.18-.18-.606-.322-1.258-.25a3.271 3.271 0 0 0-.824.202Zm1.519 3.675L3.828 16.53a1 1 0 0 0 0 1.414l2.736 2.737a1 1 0 0 0 1.414 0l6.091-6.091-4.15-4.15Z"/>
+                            </svg>
+                            {% endif %}
+
+                            {% if Badges.has_badge(badges, Badges.VERIFIED) %}
+                            <svg class="flex-shrink-0 text-md transition duration-75 text-color" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <title>Verified</title>
+                                <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
+                            </svg>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Display Name and Description -->
+                    <div class="flex flex-col items-center justify-between mb-4">
+                        <h1 class="text-3xl font-bold">{{ bio.display_name }}</h1>
+                        <p class="text-md self-center">{{ bio.description | replace('\\n', '<br>') | safe }}</p>
+                    </div>
+
+                    <!-- Social Links -->
+                    {% if links %}
+                    <div class="flex flex-row items-center justify-center [&>:not(:last-child)]:mr-2">
+                        {% for link in links %}
+                        <a title="{{ link.link_platform | capitalize }}" 
+                           href="{{ link.link_url }}" 
+                           class="icon-color rounded-full pfp w-12 h-12 flex items-center justify-center transition-opacity duration-300 hover:opacity-50">
+                            <i class="fa-brands fa-{{ link.link_platform }} fa-xl"></i>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

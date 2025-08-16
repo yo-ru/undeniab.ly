@@ -20,11 +20,13 @@ class User:
         name: str,
         email: str,
         privileges: int,
+        badges: int,
     ) -> None:
         self.id = id
         self.name = name
         self.email = email
         self.privileges = privileges
+        self.badges = badges
 
     def __repr__(self) -> str:
         return f"<{self.name} ({self.id})>"
@@ -34,21 +36,25 @@ class User:
         return User(**user)
 
     @staticmethod
-    async def from_db(user: int | str) -> User:
+    async def from_db(user: int | str) -> User | None:
         # check if user is int or str
         if isinstance(user, int):
-            query = "SELECT id, name, email, privileges FROM users WHERE id = :id"
+            query = "SELECT id, name, email, privileges, badges FROM users WHERE id = :id"
             args = {"id": user}
         elif isinstance(user, str):
-            query = "SELECT id, name, email, privileges FROM users WHERE name_safe = :name_safe"
+            query = "SELECT id, name, email, privileges, badges FROM users WHERE name_safe = :name_safe"
             args = {"name_safe": User.name_safe(user)}
 
         async with databases.Database(settings.DB_DSN) as db:
-            return User(**await db.fetch_one(query, args))
+            user_db = await db.fetch_one(query, args)
+
+            if user_db:
+                return User(**user_db)
+            return None
 
     @staticmethod
     def name_safe(name: str) -> str:
-        return name.lower().replace(" ", "-")
+        return name.lower().replace(" ", "_")
 
     @staticmethod
     async def signup(name: str, email: str, password: str) -> None:
@@ -64,15 +70,91 @@ class User:
             )
 
             user = await User.from_db(name)
+            
+            # Create default bio settings for the new user
+            await User._create_default_bio_settings(user.id)
+            
             session["user"] = user.__dict__
             log(f"{user} has signed up!", Ansi.LGREEN)
+
+    @staticmethod
+    async def _create_default_bio_settings(user_id: int) -> None:
+        """Create default bio settings for a new user."""
+        async with databases.Database(settings.DB_DSN) as db:
+            await db.execute(
+                """INSERT INTO bio_settings (
+                    user_id, display_name, display_name_sparkle, display_name_sparkle_color,
+                    description, typing_description, pfp_url, use_discord_pfp, pfp_decoration,
+                    banner_url, bg_url, bg_color, bg_blur, bg_brightness, autoplay_fix,
+                    autoplay_txt, media_embed_title, media_embed_url, media_embed_default_open,
+                    cursor_url, cursor_center, cursor_effect, animate_title, p_color, s_color,
+                    a_color, t_color, i_color, font, opacity, blur, border_width, border_radius,
+                    show_views, show_badges, badge_position, glow, rounded_socials, animations,
+                    parallex, discord_presence, discord_invite, show_custom_link_url, layout
+                ) VALUES (
+                    :user_id, :display_name, :display_name_sparkle, :display_name_sparkle_color,
+                    :description, :typing_description, :pfp_url, :use_discord_pfp, :pfp_decoration,
+                    :banner_url, :bg_url, :bg_color, :bg_blur, :bg_brightness, :autoplay_fix,
+                    :autoplay_txt, :media_embed_title, :media_embed_url, :media_embed_default_open,
+                    :cursor_url, :cursor_center, :cursor_effect, :animate_title, :p_color, :s_color,
+                    :a_color, :t_color, :i_color, :font, :opacity, :blur, :border_width, :border_radius,
+                    :show_views, :show_badges, :badge_position, :glow, :rounded_socials, :animations,
+                    :parallex, :discord_presence, :discord_invite, :show_custom_link_url, :layout
+                )""",
+                {
+                    "user_id": user_id,
+                    "display_name": "",
+                    "display_name_sparkle": 0,
+                    "display_name_sparkle_color": 16347926,
+                    "description": "",
+                    "typing_description": 0,
+                    "pfp_url": "",
+                    "use_discord_pfp": 0,
+                    "pfp_decoration": 0,
+                    "banner_url": "",
+                    "bg_url": "",
+                    "bg_color": 1579035,
+                    "bg_blur": 0,
+                    "bg_brightness": 100,
+                    "autoplay_fix": 0,
+                    "autoplay_txt": "click anywhere",
+                    "media_embed_title": "",
+                    "media_embed_url": "",
+                    "media_embed_default_open": 0,
+                    "cursor_url": "",
+                    "cursor_center": 0,
+                    "cursor_effect": "sparkle",
+                    "animate_title": 0,
+                    "p_color": 1579035,
+                    "s_color": 1579035,
+                    "a_color": 16347926,
+                    "t_color": 16347926,
+                    "i_color": 16347926,
+                    "font": "Fira Code",
+                    "opacity": 0.6,
+                    "blur": 10,
+                    "border_width": 2,
+                    "border_radius": 0.4,
+                    "show_views": 1,
+                    "show_badges": 1,
+                    "badge_position": "corner",
+                    "glow": 0,
+                    "rounded_socials": 1,
+                    "animations": 0,
+                    "parallex": 1,
+                    "discord_presence": 1,
+                    "discord_invite": "",
+                    "show_custom_link_url": 1,
+                    "layout": 1
+                }
+            )
 
     @staticmethod
     async def login(name: str, password: str) -> bool:
         async with databases.Database(settings.DB_DSN) as db:
             # NOTE: we avoid using User.from_db here because we don't want to store the password in the session
             user_db = await db.fetch_one(
-                "SELECT id, name, email, privileges, pw_bcrypt FROM users WHERE name_safe = :name_safe",
+                "SELECT id, name, email, privileges, badges, pw_bcrypt FROM users WHERE name_safe = :name_safe",
                 {"name_safe": User.name_safe(name)},
             )
 
@@ -80,7 +162,7 @@ class User:
                 password.encode(),
                 user_db["pw_bcrypt"].encode(),
             ):
-                user = User(user_db.id, user_db.name, user_db.email, user_db.privileges)
+                user = User(user_db.id, user_db.name, user_db.email, user_db.privileges, user_db.badges)
                 session["user"] = user.__dict__
                 log(f"{user} has logged in!", Ansi.LGREEN)
                 return True
@@ -99,7 +181,7 @@ class User:
     def has_privilege(privilege: Privileges) -> bool:
         if not User.authenticated():
             return False
-        return User.from_dict(session["user"]).privileges & privilege != 0
+        return User.from_dict(session["user"]).privileges & privilege
 
     @staticmethod
     async def available_name(name: str) -> bool:
@@ -158,6 +240,12 @@ class User:
             return False
         finally:
             return True
+
+    @staticmethod
+    def is_banned() -> bool:
+        if not User.authenticated():
+            return False
+        return User.from_dict(session["user"]).privileges & Privileges.UNBANNED == 0
 
     @property
     def url(self) -> str:

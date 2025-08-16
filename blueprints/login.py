@@ -39,6 +39,13 @@ async def login_post():
     password = form.get("password")
 
     if await User.login(username, password):
+        if User.is_banned():
+            User.logout()
+            return await render_template(
+                "login.html",
+                toast=("error", "You are banned."),
+            )
+
         return await render_template(
             "home.html",
             toast=("success", "Successfully logged in!"),
