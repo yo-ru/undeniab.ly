@@ -5,6 +5,7 @@ import databases
 import settings
 from objects.user import User
 
+
 class Bio:
     def __init__(
         self,
@@ -108,7 +109,7 @@ class Bio:
         elif isinstance(user, str):
             query = "SELECT bio_settings.* FROM bio_settings JOIN users ON bio_settings.user_id = users.id WHERE users.name_safe = :name_safe"
             args = {"name_safe": User.name_safe(user)}
-        
+
         async with databases.Database(settings.DB_DSN) as db:
             bio_db = await db.fetch_one(query, args)
             if bio_db is None:

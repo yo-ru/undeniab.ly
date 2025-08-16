@@ -39,7 +39,9 @@ class User:
     async def from_db(user: int | str) -> User | None:
         # check if user is int or str
         if isinstance(user, int):
-            query = "SELECT id, name, email, privileges, badges FROM users WHERE id = :id"
+            query = (
+                "SELECT id, name, email, privileges, badges FROM users WHERE id = :id"
+            )
             args = {"id": user}
         elif isinstance(user, str):
             query = "SELECT id, name, email, privileges, badges FROM users WHERE name_safe = :name_safe"
@@ -70,10 +72,10 @@ class User:
             )
 
             user = await User.from_db(name)
-            
+
             # Create default bio settings for the new user (TODO: broken?)
             await User._create_default_bio_settings(user.id)
-            
+
             session["user"] = user.__dict__
             log(f"{user} has signed up!", Ansi.LGREEN)
 
@@ -145,8 +147,8 @@ class User:
                     "discord_presence": 1,
                     "discord_invite": "",
                     "show_custom_link_url": 1,
-                    "layout": 1
-                }
+                    "layout": 1,
+                },
             )
 
     @staticmethod
@@ -162,7 +164,13 @@ class User:
                 password.encode(),
                 user_db["pw_bcrypt"].encode(),
             ):
-                user = User(user_db.id, user_db.name, user_db.email, user_db.privileges, user_db.badges)
+                user = User(
+                    user_db.id,
+                    user_db.name,
+                    user_db.email,
+                    user_db.privileges,
+                    user_db.badges,
+                )
                 session["user"] = user.__dict__
                 log(f"{user} has logged in!", Ansi.LGREEN)
                 return True

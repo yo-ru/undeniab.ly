@@ -3,6 +3,7 @@ from __future__ import annotations
 from enum import IntFlag
 from enum import unique
 
+
 @unique
 class Badges(IntFlag):
     VERIFIED = 1 << 0

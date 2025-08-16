@@ -5,6 +5,7 @@ import databases
 import settings
 from objects.user import User
 
+
 class Links:
     def __init__(
         self,

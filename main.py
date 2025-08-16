@@ -11,11 +11,11 @@ from quart import request
 from werkzeug.exceptions import HTTPException
 
 import settings
-from constants.privileges import Privileges
 from constants.badges import Badges
-from objects.user import User
+from constants.privileges import Privileges
 from objects.bio import Bio
 from objects.links import Links
+from objects.user import User
 
 # app
 app = Quart(__name__)
@@ -23,13 +23,21 @@ app.secret_key = os.urandom(32)
 app.permanent_session_lifetime = 86400  # 1 day
 
 # expose objects to jinja
-exposed_objects = {"User": User, "Privileges": Privileges, "Bio": Bio, "Badges": Badges, "Links": Links}
+exposed_objects = {
+    "User": User,
+    "Privileges": Privileges,
+    "Bio": Bio,
+    "Badges": Badges,
+    "Links": Links,
+}
 for obj in exposed_objects:
     app.jinja_env.globals[obj] = exposed_objects[obj]
+
 
 @app.template_filter()
 def bitwise_left_shift(value, shift_by):
     return value << shift_by
+
 
 # before serving
 @app.before_serving
