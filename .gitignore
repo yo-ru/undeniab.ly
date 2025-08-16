@@ -4,6 +4,9 @@
 # ignore tailwind output
 output.css
 
+# ignore Identifier files
+*.Identifier*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
