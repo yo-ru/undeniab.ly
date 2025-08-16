@@ -71,7 +71,7 @@ class User:
 
             user = await User.from_db(name)
             
-            # Create default bio settings for the new user
+            # Create default bio settings for the new user (TODO: broken?)
             await User._create_default_bio_settings(user.id)
             
             session["user"] = user.__dict__

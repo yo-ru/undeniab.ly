@@ -13,11 +13,15 @@ build-css-dev:
 install:
 	npm i
 	make build-css
+
+	pipx install pipenv
 	pipenv install
 
 install-dev:
 	npm i
 	make build-css
+
+	pipx install pipenv
 	pipenv install --dev
 
 uninstall:
