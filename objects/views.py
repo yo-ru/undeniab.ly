@@ -30,8 +30,8 @@ class Views:
             try:
                 ip_hash = hashlib.sha256(ip.encode()).digest()
                 await db.execute(
-                    "INSERT INTO bio_views (ip_hash, country, user_id) VALUES (:ip_hash, :country, :user_id)",
-                    {"ip_hash": ip_hash, "country": country, "user_id": user_id},
+                    "INSERT INTO bio_views (ip, country, user_id) VALUES (:ip, :country, :user_id)",
+                    {"ip": ip_hash, "country": country, "user_id": user_id},
                 )
                 return True
             except Exception:
